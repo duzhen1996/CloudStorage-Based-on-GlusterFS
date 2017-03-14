@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+        <!--对静态资源的请求-->
+       <mvc:resources mapping="bower_components/**" location="/bower_components/"/>
+       <mvc:resources mapping="dist/**" location="/dist/"/>
+       <mvc:resources mapping="js/**" location="/js/"/>
+       <mvc:resources mapping="less/**" location="/less/"/>
+       <mvc:resources mapping="page/**" location="/page/"/>
+
+    <!-- 视图解析器-->
+       <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="internalResourceViewResolver">
+              <property name="prefix" value="/page/"></property>
+              <property name="suffix" value=".jsp"></property>
+       </bean>
+
+       <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" id="httpMessageConverter"/>
+
+       <bean class="org.springframework.http.converter.StringHttpMessageConverter" id="httpMessageConverter2">
+              <property name="supportedMediaTypes">
+                     <list>
+                            <value>text/plain;charset=UTF-8</value>
+                     </list>
+              </property>
+       </bean>
+
+       <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" id="requestMappingHandlerAdapter">
+              <property name="messageConverters">
+                     <list>
+                            <ref bean="httpMessageConverter"></ref>
+                            <ref bean="httpMessageConverter2"></ref>
+                     </list>
+              </property>
+       </bean>
+
+    <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+        <property name="jsonpParameterNames">
+            <set>
+                <value>jsonp</value>
+                <value>callback</value>
+            </set>
+        </property>
+    </bean>
+
+</beans>
